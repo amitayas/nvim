@@ -31,7 +31,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 
     
     "Vim minimap
-    Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
+    "Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 
     "Nvim Treesitter
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
