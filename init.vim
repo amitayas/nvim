@@ -96,7 +96,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 
 
     "LSPinstall
-    Plug 'williamboman/nvim-lsp-installer'
+    "Plug 'williamboman/nvim-lsp-installer'
 
     "Vscode like icons for cmp
     Plug 'onsails/lspkind-nvim'
@@ -155,7 +155,7 @@ let g:minimap_auto_start_win_enter = 1
 "Native LSP and autocompletion config in lua
 source ~/.config/nvim/lsp/lsp-config.vim
 "luafile ~/.config/nvim/lsp/compe-config.lua
-luafile ~/.config/nvim/lsp/lspinstall-config.lua
+"luafile ~/.config/nvim/lsp/lspinstall-config.lua
 "luafile ~/.config/nvim/lsp/cmp-config.lua
 
 
@@ -224,4 +224,57 @@ lua <<EOF
 EOF
 
 :hi CmpItemAbbrMatchFuzzy guifg=#fe8019
+
+lua << EOF
+require'lspconfig'.zls.setup{}
+EOF
+
+lua << EOF
+--Enable (broadcasting) snippet capability for completion
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+require'lspconfig'.html.setup {
+capabilities = capabilities,
+}
+
+EOF
+
+
+" NOTE: You can use other key to expand snippet.
+
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
+
+" If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
+let g:vsnip_filetypes = {}
+let g:vsnip_filetypes.javascriptreact = ['javascript']
+let g:vsnip_filetypes.typescriptreact = ['typescript']
+
+lua << EOF
+local g = vim.g
+local fn = vim.fn
+local map = vim.api.nvim_set_keymap
+
+g.vsnip_snippet_dir = fn.expand('~/.config/nvim/vsnip')
+
+EOF
 
