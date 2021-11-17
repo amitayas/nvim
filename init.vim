@@ -164,6 +164,7 @@ luafile ~/.config/nvim/lsp/go-lsp.lua
 luafile ~/.config/nvim/lsp/python-lsp.lua
 luafile ~/.config/nvim/lsp/rust-lsp.lua
 luafile ~/.config/nvim/lsp/c-lsp.lua
+luafile ~/.config/nvim/lsp/html-lsp.lua
 
 "Treesitter config in lua
 luafile ~/.config/nvim/treesitter-config.lua
@@ -226,19 +227,10 @@ EOF
 :hi CmpItemAbbrMatchFuzzy guifg=#fe8019
 
 lua << EOF
-require'lspconfig'.zls.setup{}
+require'lspconfig'.julials.setup{}
 EOF
 
-lua << EOF
---Enable (broadcasting) snippet capability for completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require'lspconfig'.html.setup {
-capabilities = capabilities,
-}
-
-EOF
 
 
 " NOTE: You can use other key to expand snippet.
