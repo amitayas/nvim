@@ -71,10 +71,14 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     " Install snippet engine (This example installs [hrsh7th/vim-vsnip](https://github.com/hrsh7th/vim-vsnip))
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/cmp-vsnip'
+    Plug 'hrsh7th/vim-vsnip-integ'
+
     "Install path completion engine
     Plug 'hrsh7th/cmp-path'
     " Install the buffer completion engine
     Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-cmdline'
+
 
     Plug 'saadparwaiz1/cmp_luasnip'
 
@@ -101,6 +105,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     "Vscode like icons for cmp
     Plug 'onsails/lspkind-nvim'
     
+    Plug 'github/copilot.vim'
     "Plug 'dag/vim-fish'
 
 
@@ -153,7 +158,7 @@ let g:minimap_auto_start = 1
 let g:minimap_auto_start_win_enter = 1
 
 "Native LSP and autocompletion config in lua
-source ~/.config/nvim/lsp/lsp-config.vim
+source ~/.config/nvim/lsp/nvim-lsp-config.vim
 "luafile ~/.config/nvim/lsp/compe-config.lua
 "luafile ~/.config/nvim/lsp/lspinstall-config.lua
 "luafile ~/.config/nvim/lsp/cmp-config.lua
@@ -170,60 +175,8 @@ luafile ~/.config/nvim/lsp/html-lsp.lua
 luafile ~/.config/nvim/treesitter-config.lua
 
 
-set completeopt=menu,menuone,noselect
-
-lua <<EOF
-  -- Setup nvim-cmp.
-  local cmp = require'cmp'
-
-  cmp.setup({
-    CmpItemAbbrMatchFuzzy = { style = 'bold' },
-    snippet = {
-      expand = function(args)
-        -- For `vsnip` user.
-        vim.fn["vsnip#anonymous"](args.body)
-
-        -- For `luasnip` user.
-        -- require('luasnip').lsp_expand(args.body)
-
-        -- For `ultisnips` user.
-        -- vim.fn["UltiSnips#Anon"](args.body)
-      end,
-    },
-    mapping = {
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    sources = {
-      {name='path'},
-      { name = 'nvim_lsp' },
-
-      -- For vsnip user.
-      { name = 'vsnip' },
-
-      -- For luasnip user.
-      -- { name = 'luasnip' },
-
-      -- For ultisnips user.
-      -- { name = 'ultisnips' },
-
-      { name = 'buffer' },
-    }
-  })
-
-  -- Setup lspconfig.
-    local lspkind = require('lspkind')
-    cmp.setup {
-        formatting = {
-        format = lspkind.cmp_format(),
-        },
-    }
-    
-EOF
-
+"cmp config file in vim script along with fuzzy matching
+source ~/.config/nvim/lsp/cmp-config.vim
 :hi CmpItemAbbrMatchFuzzy guifg=#fe8019
 
 lua << EOF
@@ -232,9 +185,9 @@ EOF
 
 
 
+" Vsnip snippet engine config
 
 " NOTE: You can use other key to expand snippet.
-
 " Expand
 imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
