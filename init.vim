@@ -12,7 +12,9 @@ set shiftwidth=4
 set expandtab
 
 call plug#begin('~/.config/nvim/autoload/plugged')
-
+    "One Dark theme
+    Plug 'joshdick/onedark.vim'
+    
     "Nordic theme
     Plug 'arcticicestudio/nord-vim'
     "Plug 'shaunsingh/nord.nvim'
@@ -105,10 +107,14 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     "Vscode like icons for cmp
     Plug 'onsails/lspkind-nvim'
     
+    "Float terminal
+    Plug 'voldikss/vim-floaterm'
+
+    Plug 'rafamadriz/friendly-snippets'
+
     Plug 'github/copilot.vim'
     "Plug 'dag/vim-fish'
-
-
+    
 call plug#end()
 
 
@@ -144,12 +150,12 @@ nnoremap <C-f> :NERDTreeFind<CR>
 luafile ~/.config/nvim/scroll-config.lua
 
 "colorscheme
-colorscheme gruvbox
+colorscheme onedark
 
 
 "Lua line config
 lua <<EOF
-require('lualine').setup{options = {theme = 'gruvbox_dark'}}    
+require('lualine').setup{options = {theme = 'onedark'}}    
 EOF
 
 "Minimap Config
@@ -168,7 +174,7 @@ source ~/.config/nvim/lsp/nvim-lsp-config.vim
 luafile ~/.config/nvim/lsp/go-lsp.lua
 luafile ~/.config/nvim/lsp/python-lsp.lua
 luafile ~/.config/nvim/lsp/rust-lsp.lua
-luafile ~/.config/nvim/lsp/c-lsp.lua
+"luafile ~/.config/nvim/lsp/c-lsp.lua
 luafile ~/.config/nvim/lsp/html-lsp.lua
 
 "Treesitter config in lua
@@ -177,8 +183,12 @@ luafile ~/.config/nvim/treesitter-config.lua
 
 "cmp config file in vim script along with fuzzy matching
 source ~/.config/nvim/lsp/cmp-config.vim
-:hi CmpItemAbbrMatchFuzzy guifg=#fe8019
+":hi CmpItemAbbrMatchFuzzy guifg=#fe8019
+:hi CmpItemAbbrMatchFuzzy guifg=#e06c7f
 
+
+
+"Small lua snippet for testing language servers
 lua << EOF
 require'lspconfig'.julials.setup{}
 EOF
@@ -213,13 +223,22 @@ xmap        S   <Plug>(vsnip-cut-text)
 let g:vsnip_filetypes = {}
 let g:vsnip_filetypes.javascriptreact = ['javascript']
 let g:vsnip_filetypes.typescriptreact = ['typescript']
+"let g:vsnip_filetypes.c = ['c']
+
 
 lua << EOF
 local g = vim.g
 local fn = vim.fn
 local map = vim.api.nvim_set_keymap
 
-g.vsnip_snippet_dir = fn.expand('~/.config/nvim/vsnip')
+--g.vsnip_snippet_dir = fn.expand('~/.config/nvim/vsnip')
 
 EOF
+
+
+
+"Floating terminal configs
+nnoremap <A-t> :FloatermNew fish<CR>
+let g:floaterm_autoclose = 1
+let g:floaterm_keymap_toggle = '<F12>'
 
