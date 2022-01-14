@@ -1,6 +1,5 @@
 lua << EOF
 local nvim_lsp = require('lspconfig')
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -36,7 +35,7 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'rust_analyzer', 'tsserver', 'clangd' }
+local servers = { 'pyright', 'clangd' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -46,12 +45,43 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+
+nvim_lsp.rust_analyzer.setup({
+    capabilities=capabilities,
+    on_attach=on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            assist = {
+                importGranularity = "module",
+                importPrefix = "by_self",
+            },
+            cargo = {
+                loadOutDirsFromCheck = true,
+                autoreload = true,
+                allFeatures = true,
+            },
+            procMacro = {
+                enable = true
+            },
+            checkOnSave = {
+                enable = true,
+                command = "clippy",
+            },
+        },
+    }
+})
+
+
 vim.diagnostic.config({
   virtual_text = true,
   signs = true,
   underline = true,
   update_in_insert = true,
-  severity_sort = false,
+  severity_sort = true,
 })
+
+
+vim.o.updatetime = 250
+vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
 
 EOF

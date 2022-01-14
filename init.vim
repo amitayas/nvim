@@ -113,6 +113,8 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'rafamadriz/friendly-snippets'
 
     Plug 'github/copilot.vim'
+    Plug 'rust-lang/rust.vim'
+
     "Plug 'dag/vim-fish'
     
 call plug#end()
@@ -172,8 +174,8 @@ source ~/.config/nvim/lsp/nvim-lsp-config.vim
 
 "Language server configs in lua
 luafile ~/.config/nvim/lsp/go-lsp.lua
-luafile ~/.config/nvim/lsp/python-lsp.lua
-luafile ~/.config/nvim/lsp/rust-lsp.lua
+"luafile ~/.config/nvim/lsp/python-lsp.lua
+"luafile ~/.config/nvim/lsp/rust-lsp.lua
 "luafile ~/.config/nvim/lsp/c-lsp.lua
 luafile ~/.config/nvim/lsp/html-lsp.lua
 
@@ -238,7 +240,7 @@ EOF
 
 
 "Floating terminal configs
-nnoremap <A-t> :FloatermNew fish<CR>
+nnoremap <A-t> :FloatermNew zsh<CR>
 let g:floaterm_autoclose = 1
 let g:floaterm_keymap_toggle = '<F12>'
 
